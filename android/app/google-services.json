@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "264893986080",
+    "project_id": "recycling-86931",
+    "storage_bucket": "recycling-86931.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:264893986080:android:ec4744f6be97b966aa9345",
+        "android_client_info": {
+          "package_name": "com.example.payt"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCohu9fpXPsd8psXQEeY0gMNMhrlbsuM_Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
