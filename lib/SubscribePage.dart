@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:payt/services/validator.dart';
-import 'package:payt/HomePage.dart';
+import 'package:payt/validator.dart';
+import 'package:payt/views/HomePage.dart';
 import 'package:payt/SubscribePage.dart';
 
 class SubscribePage extends StatefulWidget {

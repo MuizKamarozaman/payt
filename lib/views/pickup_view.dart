@@ -1,14 +1,17 @@
-import 'package:flutter/material.dart';
-import 'package:payt/HomePage.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:payt/services/dbRequest.dart';
+// lib/views/pickup_view.dart
 
-class RequestPage extends StatefulWidget {
+import 'package:flutter/material.dart';
+import 'package:payt/controllers/pickup_controller.dart';
+import 'package:payt/views/HomePage.dart';
+
+
+class PickupView extends StatefulWidget {
   @override
-  _RequestPageState createState() => _RequestPageState();
+  _PickupViewState createState() => _PickupViewState();
 }
 
-class _RequestPageState extends State<RequestPage> {
+class _PickupViewState extends State<PickupView> {
+  final PickupController _controller = PickupController();
   List<Map<String, dynamic>> dataFromDatabase = [];
 
   @override
@@ -18,14 +21,12 @@ class _RequestPageState extends State<RequestPage> {
   }
 
   Future<void> fetchData() async {
-    dbPickup db = dbPickup();
-    List<Map<String, dynamic>> pickupData = await db.getPickupData();
+    List<Map<String, dynamic>> pickupData = await _controller.getPickupData();
     setState(() {
       dataFromDatabase = pickupData;
     });
   }
 
-  // Function to show confirmation dialog
   Future<void> showConfirmationDialog(String id) async {
     return showDialog<void>(
       context: context,
@@ -43,10 +44,9 @@ class _RequestPageState extends State<RequestPage> {
             TextButton(
               child: Text('Update'),
               onPressed: () {
-                dbPickup db = dbPickup();
-                db.updateStatus(id);
+                _controller.updateStatus(id);
                 Navigator.of(context).pop();
-                fetchData(); // Fetch data again after update
+                fetchData();
               },
             ),
           ],
@@ -57,8 +57,10 @@ class _RequestPageState extends State<RequestPage> {
 
   @override
   Widget build(BuildContext context) {
-    List<Map<String, dynamic>> pendingApprovalData = dataFromDatabase.where((data) => data['status'] == false).toList();
-    List<Map<String, dynamic>> approvedData = dataFromDatabase.where((data) => data['status'] == true).toList();
+    List<Map<String, dynamic>> pendingApprovalData =
+        dataFromDatabase.where((data) => data['status'] == false).toList();
+    List<Map<String, dynamic>> approvedData =
+        dataFromDatabase.where((data) => data['status'] == true).toList();
 
     return Scaffold(
       appBar: AppBar(
@@ -94,7 +96,8 @@ class _RequestPageState extends State<RequestPage> {
                   children: [
                     Text(
                       'Pending Approval',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                     SizedBox(height: 8),
                     Container(
@@ -103,9 +106,12 @@ class _RequestPageState extends State<RequestPage> {
                               children: pendingApprovalData.map((data) {
                                 return Card(
                                   child: ListTile(
-                                    title: Text(data['location'], style: TextStyle(fontWeight: FontWeight.bold)),
+                                    title: Text(data['location'],
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold)),
                                     subtitle: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(data['date']),
                                         Text(data['time']),
@@ -127,7 +133,8 @@ class _RequestPageState extends State<RequestPage> {
                               padding: EdgeInsets.symmetric(horizontal: 16),
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
-                                border: Border.all(color: Theme.of(context).dividerColor),
+                                border: Border.all(
+                                    color: Theme.of(context).dividerColor),
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: Text(
@@ -139,7 +146,8 @@ class _RequestPageState extends State<RequestPage> {
                     SizedBox(height: 32),
                     Text(
                       'Approved Request',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                     SizedBox(height: 8),
                     Container(
@@ -149,9 +157,12 @@ class _RequestPageState extends State<RequestPage> {
                                 int telno = data['telno'];
                                 return Card(
                                   child: ListTile(
-                                    title: Text(data['location'], style: TextStyle(fontWeight: FontWeight.bold)),
+                                    title: Text(data['location'],
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold)),
                                     subtitle: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(data['date']),
                                         Text(data['time']),
@@ -168,11 +179,12 @@ class _RequestPageState extends State<RequestPage> {
                               padding: EdgeInsets.symmetric(horizontal: 16),
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
-                                border: Border.all(color: Theme.of(context).dividerColor),
+                                border: Border.all(
+                                    color: Theme.of(context).dividerColor),
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: Text(
-                                'No pending approval',
+                                'No approved requests',
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               ),
                             ),

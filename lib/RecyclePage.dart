@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:payt/HomePage.dart';
+import 'package:payt/views/HomePage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:payt/views/HomePage.dart';
 
 class RecyclePage extends StatefulWidget {
   @override

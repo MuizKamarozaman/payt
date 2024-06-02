@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:payt/loginPage.dart';
-import 'package:payt/SignUpPage.dart';
-import 'package:payt/HomePage.dart';
+import 'package:payt/views/loginPage.dart';
+import 'package:payt/views/SignUpPage.dart';
+import 'package:payt/views/HomePage.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
+import 'models/firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 void main() async {

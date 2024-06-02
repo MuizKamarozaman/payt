@@ -1,7 +1,9 @@
+// lib/views/signUpPage.dart
+
 import 'package:flutter/material.dart';
-import 'package:payt/loginPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:payt/controllers/user_controller.dart';
+import 'package:payt/views/loginPage.dart';
 
 class SignupPage extends StatefulWidget {
   @override
@@ -9,53 +11,31 @@ class SignupPage extends StatefulWidget {
 }
 
 class _SignupPageState extends State<SignupPage> {
-  final _auth = FirebaseAuth.instance;
-  final fullName = TextEditingController(); // Updated variable declaration
-  final email = TextEditingController(); // Updated variable declaration
-  final contactNo = TextEditingController(); // Updated variable declaration
-  final location = TextEditingController(); // Updated variable declaration
-  final username = TextEditingController(); // Updated variable declaration
-  final password = TextEditingController(); // Updated variable declaration
+  final UserController _userController = UserController();
+  final TextEditingController fullName = TextEditingController();
+  final TextEditingController email = TextEditingController();
+  final TextEditingController contactNo = TextEditingController();
+  final TextEditingController location = TextEditingController();
+  final TextEditingController username = TextEditingController();
+  final TextEditingController password = TextEditingController();
   bool showSpinner = false;
 
   Future<void> _createUserWithEmailAndPassword() async {
-    final String fullNameText = fullName.text;
-    final String emailText = email.text;
-    final String contactNoText = contactNo.text;
-    final String locationText = location.text;
-    final String usernameText = username.text;
-    final String passwordText = password.text;
-
-    print(
-        'Add $fullNameText $emailText $contactNoText $locationText $usernameText $passwordText into the debug console');
-
     setState(() {
       showSpinner = true;
     });
 
     try {
-      final newUser = await _auth.createUserWithEmailAndPassword(
-        email: emailText,
-        password: passwordText,
+      await _userController.createUser(
+        fullName: fullName.text,
+        email: email.text,
+        contactNo: contactNo.text,
+        location: location.text,
+        username: username.text,
+        password: password.text,
       );
 
-      if (newUser != null) {
-        // Add additional user info to Firestore
-        final userCollection = FirebaseFirestore.instance.collection('users');
-        final user = _auth.currentUser;
-
-        await userCollection.doc(user!.uid).set({
-          'uid': user.uid, // Store the UID in the document
-          'full_name': fullNameText,
-          'email': emailText,
-          'contact_no': contactNoText,
-          'location': locationText,
-          'username': usernameText,
-          'role': 'user', // Assigning role as "user"
-        });
-
-        Navigator.pushNamed(context, 'login_screen');
-      }
+      Navigator.pushNamed(context, 'login_screen');
     } catch (e) {
       print(e);
     }
@@ -122,9 +102,6 @@ class _SignupPageState extends State<SignupPage> {
                   SizedBox(height: 17.0),
                   TextField(
                     controller: email,
-                    onChanged: (value) {
-                      //Do something with the user input.
-                    },
                     decoration: InputDecoration(
                       focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.green),
@@ -177,9 +154,6 @@ class _SignupPageState extends State<SignupPage> {
                   SizedBox(height: 17.0),
                   TextField(
                     controller: password,
-                    onChanged: (value) {
-                      //Do something with the user input.
-                    },
                     obscureText: true,
                     decoration: InputDecoration(
                       focusedBorder: OutlineInputBorder(

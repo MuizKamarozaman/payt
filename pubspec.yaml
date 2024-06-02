@@ -34,6 +34,7 @@ dependencies:
   cloud_firestore: ^4.7.1
   cupertino_icons: ^1.0.2
   firebase_core: ^2.24.2
+  get: ^4.6.5
   
 
 dev_dependencies:

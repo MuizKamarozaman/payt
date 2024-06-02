@@ -2,18 +2,19 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:payt/RecyclePage.dart';
-import 'package:payt/HistoryPage.dart';
+import 'package:payt/views/HistoryPage.dart';
 import 'package:payt/ProfilePage.dart';
 import 'package:payt/SubscribePage.dart';
-import 'package:payt/loginPage.dart';
-import 'package:payt/WMSP/wmsp_recycle.dart';
-import 'package:payt/WMSP/wmsp_inventory.dart';
-import 'package:payt/WMSP/wmsp_request.dart';
+import 'package:payt/views/loginPage.dart';
+import 'package:payt/views/pickup_view.dart';
+import 'package:payt/wmsp_recycle.dart';
+import 'package:payt/wmsp_inventory.dart';
 import 'package:payt/LocationPage.dart';
 import 'package:payt/UserRequestPage.dart';
 import 'package:payt/leaderboard.dart';
 import 'package:payt/staffProfilePage.dart';
-import 'package:payt/HistoryHelper.dart';
+import 'package:payt/models/HistoryHelper.dart';
+import 'package:payt/views/pickup_view.dart';
 
 class RedirectPage extends StatefulWidget {
   RedirectPage({required this.userId});
@@ -68,20 +69,20 @@ class _RedirectPageState extends State<RedirectPage> {
 
 class HomePageUser extends StatefulWidget {
   @override
-  _HomePageState1 createState() => _HomePageState1();
+  _HomePageUserState createState() => _HomePageUserState();
 }
 
-class _HomePageState1 extends State<HomePageUser> {
+class _HomePageUserState extends State<HomePageUser> {
   int _currentIndex = 0;
   List<Map<String, dynamic>>? recycleHistory;
   late PageController _pageController;
+  bool isLoading = true;
 
-  Future<bool> getPickupStatus(String username) async {
-    final pickupDoc = await FirebaseFirestore.instance
-        .collection('pickup')
-        .doc(username)
-        .get();
-    return pickupDoc.exists && pickupDoc.data()?['status'] == false;
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController(initialPage: _currentIndex);
+    fetchRecycleHistory();
   }
 
   Future<void> fetchRecycleHistory() async {
@@ -90,7 +91,6 @@ class _HomePageState1 extends State<HomePageUser> {
       if (user != null) {
         CollectionReference recycleCollection =
             FirebaseFirestore.instance.collection('recycle');
-
         QuerySnapshot querySnapshot =
             await recycleCollection.doc(user.email).collection('data').get();
 
@@ -103,32 +103,28 @@ class _HomePageState1 extends State<HomePageUser> {
         });
       }
     } catch (error) {
-      setState(() {});
+      setState(() {
+        recycleHistory = [];
+      });
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
     }
+  }
+
+  void _onTabTapped(int index) {
+    setState(() {
+      _currentIndex = index;
+      _pageController.animateToPage(index,
+          duration: Duration(milliseconds: 300), curve: Curves.easeInOut);
+    });
   }
 
   @override
   void dispose() {
     _pageController.dispose();
     super.dispose();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    fetchRecycleHistory();
-    _pageController = PageController(initialPage: _currentIndex);
-  }
-
-  void _onTabTapped(int index) {
-    setState(() {
-      _currentIndex = index;
-      _pageController.animateToPage(
-        index,
-        duration: Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-      );
-    });
   }
 
   @override
@@ -141,103 +137,88 @@ class _HomePageState1 extends State<HomePageUser> {
     }
 
     return Scaffold(
-        appBar: _currentIndex == 0
-            ? AppBar(
-                title: Text("Recytrack"),
-                backgroundColor: Color.fromRGBO(101, 145, 87, 1),
-                actions: [
-                  Container(
-                    padding: EdgeInsets.only(top: 10, right: 10, bottom: 10),
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        primary: Color.fromRGBO(0, 121, 46, 1),
-                      ),
-                      child: Text('Become A Member Today'),
-                      onPressed: () {
-                        Navigator.push(
+      appBar: _currentIndex == 0
+          ? AppBar(
+              title: Text("Recytrack"),
+              backgroundColor: Color.fromRGBO(101, 145, 87, 1),
+              actions: [
+                Container(
+                  padding: EdgeInsets.only(top: 10, right: 10, bottom: 10),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        primary: Color.fromRGBO(0, 121, 46, 1)),
+                    child: Text('Become A Member Today'),
+                    onPressed: () {
+                      Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => SubscribePage()),
-                        );
-                      },
-                    ),
+                              builder: (context) => SubscribePage()));
+                    },
                   ),
-                ],
-              )
-            : null,
-        body: WillPopScope(
-          onWillPop: () async {
-            if (_currentIndex != 0) {
-              setState(() {
-                _currentIndex = 0;
-                _pageController.animateToPage(
-                  _currentIndex,
-                  duration: Duration(milliseconds: 300),
-                  curve: Curves.easeInOut,
-                );
-              });
-              return false;
-            }
-            return true;
-          },
-          child: Scaffold(
-            backgroundColor: Color.fromRGBO(241, 241, 241, 1),
-            body: GestureDetector(
-              onHorizontalDragEnd: (DragEndDetails details) {
-                if (details.primaryVelocity! > 0) {
-                  // Swiped downwards
-                  if (_currentIndex != 0) {
-                    setState(() {
-                      _currentIndex = 0;
-                      _pageController.animateToPage(
-                        _currentIndex,
-                        duration: Duration(milliseconds: 300),
-                        curve: Curves.easeInOut,
-                      );
-                    });
-                  }
-                }
-              },
-              child: PageView(
-                controller: _pageController,
-                physics: NeverScrollableScrollPhysics(),
-                children: [
-                  HomeScreenUser(
-                      totalWeights: totalWeights, totalMoney: totalMoney),
-                  RecyclePage(),
-                  HistoryPage(),
-                  ProfilePage(),
-                ],
-              ),
-            ),
-            bottomNavigationBar: BottomNavigationBar(
-              type: BottomNavigationBarType.fixed,
-              currentIndex: _currentIndex,
-              onTap: _onTabTapped,
-              unselectedItemColor: Colors.white,
-              selectedItemColor: Colors.black,
-              backgroundColor: Color.fromRGBO(101, 145, 87, 1),
-              items: [
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.home),
-                  label: 'Home',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.recycling_rounded),
-                  label: 'Recycle',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.history),
-                  label: 'History',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.person_2_outlined),
-                  label: 'Profile',
                 ),
               ],
-            ),
+            )
+          : null,
+      body: WillPopScope(
+        onWillPop: () async {
+          if (_currentIndex != 0) {
+            setState(() {
+              _currentIndex = 0;
+              _pageController.animateToPage(_currentIndex,
+                  duration: Duration(milliseconds: 300),
+                  curve: Curves.easeInOut);
+            });
+            return false;
+          }
+          return true;
+        },
+        child: Scaffold(
+          backgroundColor: Color.fromRGBO(241, 241, 241, 1),
+          body: isLoading
+              ? Center(child: CircularProgressIndicator())
+              : GestureDetector(
+                  onHorizontalDragEnd: (details) {
+                    if (details.primaryVelocity! > 0 && _currentIndex != 0) {
+                      setState(() {
+                        _currentIndex = 0;
+                        _pageController.animateToPage(_currentIndex,
+                            duration: Duration(milliseconds: 300),
+                            curve: Curves.easeInOut);
+                      });
+                    }
+                  },
+                  child: PageView(
+                    controller: _pageController,
+                    physics: NeverScrollableScrollPhysics(),
+                    children: [
+                      HomeScreenUser(
+                          totalWeights: totalWeights, totalMoney: totalMoney),
+                      RecyclePage(),
+                      HistoryPage(),
+                      ProfilePage(),
+                    ],
+                  ),
+                ),
+          bottomNavigationBar: BottomNavigationBar(
+            type: BottomNavigationBarType.fixed,
+            currentIndex: _currentIndex,
+            onTap: _onTabTapped,
+            unselectedItemColor: Colors.white,
+            selectedItemColor: Colors.black,
+            backgroundColor: Color.fromRGBO(101, 145, 87, 1),
+            items: [
+              BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.recycling_rounded), label: 'Recycle'),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.history), label: 'History'),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.person_2_outlined), label: 'Profile'),
+            ],
           ),
-        ));
+        ),
+      ),
+    );
   }
 }
 
@@ -676,7 +657,7 @@ class _HomePageState2 extends State<HomePageStaff> {
             children: [
               HomeScreenStaff(),
               WMSPRecyclePage(),
-              RequestPage(),
+              PickupView(),
               staffProfilePage(),
               // WMSPRecyclePage(),
             ],
@@ -763,7 +744,7 @@ class HomeScreenStaff extends StatelessWidget {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => RequestPage()),
+                    MaterialPageRoute(builder: (context) => PickupView()),
                   );
                 },
                 child: Container(

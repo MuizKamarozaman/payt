@@ -1,8 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:payt/HomePage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:payt/views/HomePage.dart';
 
 class UserRequestPage extends StatefulWidget {
   @override
@@ -105,6 +105,7 @@ class _UserRequestPageState extends State<UserRequestPage> {
                     }
                     return null;
                   },
+                  keyboardType: TextInputType.number,
                 ),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
@@ -126,7 +127,7 @@ class _UserRequestPageState extends State<UserRequestPage> {
                             'time': _timeController.text,
                             'location': _locationController.text,
                             'status': false,
-                            'telno': _telNoController.text,
+                            'telno': int.parse(_telNoController.text),
                             'username': username,
                           });
 

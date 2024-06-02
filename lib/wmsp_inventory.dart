@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:payt/HomePage.dart';
+import 'package:payt/views/HomePage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:payt/services/dbRecycle.dart';
+import 'package:payt/dbRecycle.dart';
+import 'package:payt/views/HomePage.dart';
 
 class InventoryPage extends StatefulWidget {
   @override

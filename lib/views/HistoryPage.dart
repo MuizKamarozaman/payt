@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:payt/HomePage.dart';
+import 'package:payt/views/HomePage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:payt/views/HomePage.dart';
 
 class HistoryPage extends StatefulWidget {
   @override

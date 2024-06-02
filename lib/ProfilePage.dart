@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:payt/loginPage.dart';
-import 'package:payt/HomePage.dart';
+import 'package:payt/views/HomePage.dart';
+import 'package:payt/views/loginPage.dart';
+import 'package:payt/views/HomePage.dart';
 import 'package:payt/UpdateProfile.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
