@@ -1,6 +1,7 @@
 # payt
 
-A new Flutter project.
+Pay-As-You-Throw An Innovative Approach to Waste Management and Recycling Mobile Applications
+
 
 ## Getting Started
 
