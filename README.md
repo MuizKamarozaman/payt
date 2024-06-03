@@ -1,16 +1,10 @@
 # payt
 
-A new Flutter project.
+Pay-As-You-Throw An Innovative Approach to Waste Management and Recycling Mobile Applications
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
+## Project Aim
 
-A few resources to get you started if this is your first Flutter project:
+The aim of this project is to develop a comprehensive and user-friendly waste management and recycling system based on the Pay-As-You-Throw (PAYT) model that promotes sustainable waste practices, reduces waste generation, and increases recycling rates.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
