@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:payt/views/LocationPage.dart';
+import 'package:payt/views/leaderboard.dart';
 import 'package:payt/views/loginPage.dart';
 import 'package:payt/views/SignUpPage.dart';
 import 'package:payt/views/HomePage.dart';
@@ -26,7 +28,7 @@ class MyApp extends StatelessWidget {
           // 'welcome_screen': (context) => (),
           'registration_screen': (context) => SignupPage(),
           'login_screen': (context) => LoginDemo(),
-          'home_screen': (context) => HomePageUser()
+          'home_screen': (context) => HomePageUser(),
         });
   }
 }
