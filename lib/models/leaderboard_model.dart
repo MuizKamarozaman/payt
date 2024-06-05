@@ -27,7 +27,7 @@ class LeaderboardModel {
 
       int points = 0;
       for (QueryDocumentSnapshot subDocSnapshot in subCollectionSnapshot.docs) {
-        double point = subDocSnapshot.get('point') as double;
+        double point = subDocSnapshot.get('point').toDouble();
         points += point.toInt();
       }
 
@@ -60,7 +60,7 @@ class LeaderboardModel {
 
       int totalPoints = 0;
       for (QueryDocumentSnapshot subDocSnapshot in subCollectionSnapshot.docs) {
-        double point = subDocSnapshot.get('point') as double;
+        double point = subDocSnapshot.get('point').toDouble();
         totalPoints += point.toInt();
       }
 

@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:payt/RecyclePage.dart';
+import 'package:payt/views/UserRecycle.dart';
 import 'package:payt/views/HistoryPage.dart';
 import 'package:payt/views/ProfilePage.dart';
 import 'package:payt/SubscribePage.dart';
@@ -13,9 +13,7 @@ import 'package:payt/views/LocationPage.dart';
 import 'package:payt/UserRequestPage.dart';
 import 'package:payt/views/leaderboard.dart';
 import 'package:payt/staffProfilePage.dart';
-import 'package:payt/models/HistoryHelper.dart';
-import 'package:payt/views/pickup_view.dart';
-import '';
+import 'package:payt/models/recycle_utils.dart';
 
 class RedirectPage extends StatefulWidget {
   RedirectPage({required this.userId});

@@ -1,7 +1,9 @@
+// models/recycle_utils.dart
+
 double calculateTotalWeight(List<Map<String, dynamic>> recycleHistory) {
   double totalWeight = 0;
   for (Map<String, dynamic> historyEntry in recycleHistory) {
-    double weight = historyEntry['weight'];
+    double weight = historyEntry['weight'].toDouble();
     totalWeight += weight;
   }
   return totalWeight;
