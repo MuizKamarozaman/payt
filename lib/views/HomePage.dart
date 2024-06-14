@@ -1,18 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:payt/views/UserRecycle.dart';
+import 'package:payt/views/user_Recycle.dart';
 import 'package:payt/views/HistoryPage.dart';
-import 'package:payt/views/ProfilePage.dart';
-import 'package:payt/SubscribePage.dart';
+import 'package:payt/views/profilePage.dart';
+import 'package:payt/views/subscribePage.dart';
 import 'package:payt/views/loginPage.dart';
-import 'package:payt/views/pickup_view.dart';
-import 'package:payt/wmsp_recycle.dart';
-import 'package:payt/wmsp_inventory.dart';
-import 'package:payt/views/LocationPage.dart';
-import 'package:payt/UserRequestPage.dart';
+import 'package:payt/views/pickupPage.dart';
+import 'package:payt/views/staff_RecyclePage.dart';
+import 'package:payt/views/staff_InventoryPage.dart';
+import 'package:payt/views/locationPage.dart';
+import 'package:payt/User_RequestPage.dart';
 import 'package:payt/views/leaderboard.dart';
-import 'package:payt/staffProfilePage.dart';
+import 'package:payt/views/staff_ProfilePage.dart';
 import 'package:payt/models/recycle_utils.dart';
 
 class RedirectPage extends StatefulWidget {
@@ -657,7 +657,7 @@ class _HomePageState2 extends State<HomePageStaff> {
               HomeScreenStaff(),
               WMSPRecyclePage(),
               PickupView(),
-              staffProfilePage(),
+              StaffProfilePage(),
               // WMSPRecyclePage(),
             ],
           ),

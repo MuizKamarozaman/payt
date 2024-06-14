@@ -5,9 +5,25 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:payt/models/firebase_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:payt/views/HomePage.dart';
+import 'package:get/get.dart';
+import 'package:payt/models/user_Profile_model.dart';
 
-class UserController {
+class UserController extends GetxController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  var userProfile = UserProfile(
+    fullName: '',
+    username: '',
+    location: '',
+    contactNo: '',
+  ).obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+    fetchUserProfile();
+  }
 
   // Method to check if email is already registered
   Future<bool> isEmailAlreadyRegistered(String email) async {
@@ -23,7 +39,7 @@ class UserController {
     required String username,
     required String password,
   }) async {
-    final userCollection = FirebaseFirestore.instance.collection('users');
+    final userCollection = _firestore.collection('users');
 
     UserCredential newUser = await _auth.createUserWithEmailAndPassword(
       email: email,
@@ -54,7 +70,7 @@ class UserController {
 
       User? user = userCredential.user;
       if (user != null) {
-        final userCollection = FirebaseFirestore.instance.collection('users');
+        final userCollection = _firestore.collection('users');
         DocumentSnapshot snapshot = await userCollection.doc(user.uid).get();
 
         if (snapshot.exists) {
@@ -86,6 +102,36 @@ class UserController {
       }
     } catch (e) {
       throw Exception('Error logging in user: $e');
+    }
+  }
+
+  // Fetch user profile
+  Future<void> fetchUserProfile() async {
+    try {
+      User? user = _auth.currentUser;
+      if (user != null) {
+        DocumentSnapshot doc =
+            await _firestore.collection('users').doc(user.uid).get();
+        userProfile.value =
+            UserProfile.fromMap(doc.data() as Map<String, dynamic>);
+      }
+    } catch (e) {
+      print('Error fetching user profile: $e');
+    }
+  }
+
+  // Update user profile
+  Future<void> updateUserProfile() async {
+    try {
+      User? user = _auth.currentUser;
+      if (user != null) {
+        await _firestore
+            .collection('users')
+            .doc(user.uid)
+            .update(userProfile.value.toMap());
+      }
+    } catch (e) {
+      print('Error updating user profile: $e');
     }
   }
 }

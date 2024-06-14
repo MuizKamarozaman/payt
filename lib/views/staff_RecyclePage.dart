@@ -1,34 +1,24 @@
+
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:payt/StaffRecycle.dart';
+import 'package:get/get.dart';
+import 'package:payt/controllers/staff_recycle_controller.dart';
 import 'package:payt/views/HomePage.dart';
 import 'package:payt/views/HomePage.dart';
 
-class WMSPRecyclePage extends StatefulWidget {
-  const WMSPRecyclePage({Key? key}) : super(key: key);
+class WMSPRecyclePage extends StatelessWidget {
+  final StaffRecycleController controller = Get.put(StaffRecycleController());
 
-  @override
-  _WMSPRecyclePageState createState() => _WMSPRecyclePageState();
-}
-
-class _WMSPRecyclePageState extends State<WMSPRecyclePage> {
-  //input controllers
-  TextEditingController usernameController = TextEditingController();
-  TextEditingController weightController = TextEditingController();
-  TextEditingController plasticController = TextEditingController();
-  TextEditingController glassController = TextEditingController();
-  TextEditingController paperController = TextEditingController();
-  TextEditingController rubberController = TextEditingController();
-  TextEditingController metalController = TextEditingController();
+  // Input controllers
+  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController weightController = TextEditingController();
+  final TextEditingController plasticController = TextEditingController();
+  final TextEditingController glassController = TextEditingController();
+  final TextEditingController paperController = TextEditingController();
+  final TextEditingController rubberController = TextEditingController();
+  final TextEditingController metalController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  //init the total weight
-  double totalWeight = 0.0;
-
-  //create an instance of the database service
-  dbRecycle db = dbRecycle();
-
-  //calculate the total weight
+  // Calculate the total weight
   void calculateTotalWeight() {
     double plasticWeight = double.tryParse(plasticController.text) ?? 0.0;
     double glassWeight = double.tryParse(glassController.text) ?? 0.0;
@@ -36,17 +26,12 @@ class _WMSPRecyclePageState extends State<WMSPRecyclePage> {
     double rubberWeight = double.tryParse(rubberController.text) ?? 0.0;
     double metalWeight = double.tryParse(metalController.text) ?? 0.0;
 
-    setState(() {
-      totalWeight = plasticWeight +
-          glassWeight +
-          paperWeight +
-          rubberWeight +
-          metalWeight;
-      weightController.text = totalWeight.toStringAsFixed(2);
-    });
+    double totalWeight =
+        plasticWeight + glassWeight + paperWeight + rubberWeight + metalWeight;
+    weightController.text = totalWeight.toStringAsFixed(2);
   }
 
-  //calculate the total payment
+  // Calculate the total payment
   double calculateTotalPayment() {
     double plasticWeight = double.tryParse(plasticController.text) ?? 0.0;
     double glassWeight = double.tryParse(glassController.text) ?? 0.0;
@@ -54,23 +39,21 @@ class _WMSPRecyclePageState extends State<WMSPRecyclePage> {
     double rubberWeight = double.tryParse(rubberController.text) ?? 0.0;
     double metalWeight = double.tryParse(metalController.text) ?? 0.0;
 
-    double totalPayment = plasticWeight * 0.2 +
+    return plasticWeight * 0.2 +
         glassWeight * 0.3 +
         paperWeight * 0.1 +
         rubberWeight * 0.4 +
         metalWeight * 0.5;
-
-    return totalPayment;
   }
 
-  //calculate the total point
-  double calculateTotalPoint(weight) {
-    double totalPoint = weight * 2;
-    return totalPoint;
+  // Calculate the total point
+  double calculateTotalPoint(double weight) {
+    return weight * 2;
   }
 
   // Function to show confirmation dialog
   Future<void> showConfirmationDialog(
+      BuildContext context,
       String username,
       double weight,
       double plastic,
@@ -84,7 +67,7 @@ class _WMSPRecyclePageState extends State<WMSPRecyclePage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Confirm Submition'),
+          title: Text('Confirm Submission'),
           content: Text('Are you sure you want to submit the recycle items?'),
           actions: [
             TextButton(
@@ -96,8 +79,17 @@ class _WMSPRecyclePageState extends State<WMSPRecyclePage> {
             TextButton(
               child: Text('Update'),
               onPressed: () {
-                db.addRecycleData(username, weight, plastic, glass, paper,
-                    rubber, metal, paymentTotal, point);
+                controller.addRecycleData(
+                  username,
+                  weight,
+                  plastic,
+                  glass,
+                  paper,
+                  rubber,
+                  metal,
+                  paymentTotal,
+                  point,
+                );
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => HomePageStaff()),
@@ -110,7 +102,6 @@ class _WMSPRecyclePageState extends State<WMSPRecyclePage> {
     );
   }
 
-  //body
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -312,8 +303,18 @@ class _WMSPRecyclePageState extends State<WMSPRecyclePage> {
                             double.tryParse(rubberController.text) ?? 0.0;
                         double metal =
                             double.tryParse(metalController.text) ?? 0.0;
-                        showConfirmationDialog(username, weight, plastic, glass,
-                            paper, rubber, metal, paymentTotal, point);
+                        showConfirmationDialog(
+                          context,
+                          username,
+                          weight,
+                          plastic,
+                          glass,
+                          paper,
+                          rubber,
+                          metal,
+                          paymentTotal,
+                          point,
+                        );
                       },
                       style: ElevatedButton.styleFrom(
                         primary: Color.fromRGBO(101, 145, 87, 1),

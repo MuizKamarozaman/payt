@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:payt/views/LocationPage.dart';
+import 'package:payt/views/locationPage.dart';
 import 'package:payt/views/leaderboard.dart';
 import 'package:payt/views/loginPage.dart';
-import 'package:payt/views/SignUpPage.dart';
+import 'package:payt/views/signUpPage.dart';
 import 'package:payt/views/HomePage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'models/firebase_options.dart';

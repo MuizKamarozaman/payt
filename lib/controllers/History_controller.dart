@@ -2,7 +2,7 @@
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:payt/models/History_model.dart';
+import 'package:payt/models/history_model.dart';
 
 class RecycleHistoryController extends GetxController {
   var recycleHistory = <RecycleHistory>[].obs;

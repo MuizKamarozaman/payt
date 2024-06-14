@@ -1,7 +1,7 @@
 // lib/controllers/recycle_controller.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:payt/models/UserRecycle_model.dart';
+import 'package:payt/models/user_Recycle_model.dart';
 
 class RecycleController extends GetxController {
   final RecycleModel _model = RecycleModel();

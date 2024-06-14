@@ -1,6 +1,6 @@
 // lib/controllers/location_controller.dart
 import 'package:get/get.dart';
-import 'package:payt/models/Location_model.dart';
+import 'package:payt/models/location_model.dart';
 
 class LocationController extends GetxController {
   final LocationModel _model = LocationModel();

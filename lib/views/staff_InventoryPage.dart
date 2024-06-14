@@ -1,22 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:payt/controllers/staff_recycle_controller.dart';
 import 'package:payt/views/HomePage.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:payt/StaffRecycle.dart';
-import 'package:payt/views/HomePage.dart';
 
-class InventoryPage extends StatefulWidget {
-  @override
-  _InventoryPageState createState() => _InventoryPageState();
-}
-
-class _InventoryPageState extends State<InventoryPage> {
-  late Future<List<Map<String, dynamic>>> _dataFuture;
-
-  @override
-  void initState() {
-    super.initState();
-    _dataFuture = dbRecycle().getCumulativeWeights();
-  }
+class InventoryPage extends StatelessWidget {
+  final StaffRecycleController controller = Get.put(StaffRecycleController());
 
   double calculateTotalWeight(List<Map<String, dynamic>> cumulativeWeights) {
     double totalWeight = 0;
@@ -52,22 +40,15 @@ class _InventoryPageState extends State<InventoryPage> {
           },
         ),
       ),
-      body: FutureBuilder<List<Map<String, dynamic>>>(
-        future: _dataFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else {
-            List<Map<String, dynamic>> dataFromDatabase = snapshot.data ?? [];
-            List<Map<String, dynamic>> cumulativeWeights =
-                dataFromDatabase.isNotEmpty
-                    ? dataFromDatabase
-                    : List<Map<String, dynamic>>.filled(
-                        5, {'type': '', 'totalWeight': 0});
-            return SingleChildScrollView(
-                child: Column(
+      body: Obx(() {
+        if (controller.cumulativeWeights.isEmpty) {
+          return Center(child: CircularProgressIndicator());
+        } else {
+          List<Map<String, dynamic>> cumulativeWeights =
+              controller.cumulativeWeights;
+
+          return SingleChildScrollView(
+            child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
@@ -120,7 +101,7 @@ class _InventoryPageState extends State<InventoryPage> {
                         ),
                       ),
                     ],
-                    rows: dataFromDatabase.map((data) {
+                    rows: cumulativeWeights.map((data) {
                       return DataRow(cells: [
                         DataCell(Text(data['type'] ??
                             '')), // Ensure the key is correct and handle null values
@@ -131,10 +112,10 @@ class _InventoryPageState extends State<InventoryPage> {
                   ),
                 ),
               ],
-            ));
-          }
-        },
-      ),
+            ),
+          );
+        }
+      }),
     );
   }
 }

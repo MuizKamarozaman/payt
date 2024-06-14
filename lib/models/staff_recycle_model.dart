@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class dbRecycle {
-  // Collection reference
+class StaffRecycleModel {
   final CollectionReference recycleCollection =
       FirebaseFirestore.instance.collection('recycle');
 
@@ -47,8 +46,6 @@ class dbRecycle {
     List<Map<String, dynamic>> cumulativeWeights = [];
 
     try {
-      final CollectionReference recycleCollection =
-          FirebaseFirestore.instance.collection('recycle');
       QuerySnapshot snapshot = await recycleCollection.get();
 
       List<QueryDocumentSnapshot<Map<String, dynamic>>> documents = snapshot
@@ -79,11 +76,11 @@ class dbRecycle {
         for (QueryDocumentSnapshot<Map<String, dynamic>> dataDoc in dataDocs) {
           Map<String, dynamic>? data = dataDoc.data();
 
-          double plasticWeight = data['plastic'] ?? 0;
-          double glassWeight = data['glass'] ?? 0;
-          double paperWeight = data['paper'] ?? 0;
-          double rubberWeight = data['rubber'] ?? 0;
-          double metalWeight = data['metal'] ?? 0;
+          double plasticWeight = (data['plastic'] ?? 0).toDouble();
+          double glassWeight = (data['glass'] ?? 0).toDouble();
+          double paperWeight = (data['paper'] ?? 0).toDouble();
+          double rubberWeight = (data['rubber'] ?? 0).toDouble();
+          double metalWeight = (data['metal'] ?? 0).toDouble();
 
           cumulativePlastic += plasticWeight;
           cumulativeGlass += glassWeight;
@@ -119,9 +116,6 @@ class dbRecycle {
     List<Map<String, dynamic>> userTotalWeights = [];
 
     try {
-      final CollectionReference recycleCollection =
-          FirebaseFirestore.instance.collection('recycle');
-
       QuerySnapshot snapshot =
           await recycleCollection.doc(userId).collection('data').get();
       List<QueryDocumentSnapshot<Map<String, dynamic>>> documents = snapshot
@@ -132,7 +126,7 @@ class dbRecycle {
       // Calculate the total weights for the specific user
       double totalWeight = 0;
       for (QueryDocumentSnapshot<Map<String, dynamic>> doc in documents) {
-        double weight = doc.get('weight') as double;
+        double weight = (doc.get('weight') ?? 0).toDouble();
         totalWeight += weight;
       }
 
