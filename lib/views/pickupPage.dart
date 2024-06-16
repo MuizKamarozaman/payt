@@ -1,10 +1,8 @@
-
 // lib/views/pickup_view.dart
 
 import 'package:flutter/material.dart';
 import 'package:payt/controllers/pickup_controller.dart';
 import 'package:payt/views/HomePage.dart';
-
 
 class PickupView extends StatefulWidget {
   @override
@@ -28,7 +26,7 @@ class _PickupViewState extends State<PickupView> {
     });
   }
 
-  Future<void> showConfirmationDialog(String id) async {
+  Future<void> showConfirmationDialog(String username, String requestId) async {
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {
@@ -44,8 +42,8 @@ class _PickupViewState extends State<PickupView> {
             ),
             TextButton(
               child: Text('Update'),
-              onPressed: () {
-                _controller.updateStatus(id);
+              onPressed: () async {
+                await _controller.updateStatus(username, requestId);
                 Navigator.of(context).pop();
                 fetchData();
               },
@@ -121,7 +119,8 @@ class _PickupViewState extends State<PickupView> {
                                     trailing: IconButton(
                                       icon: Icon(Icons.check),
                                       onPressed: () {
-                                        showConfirmationDialog(data['id']);
+                                        showConfirmationDialog(
+                                            data['username'], data['id']);
                                       },
                                     ),
                                   ),

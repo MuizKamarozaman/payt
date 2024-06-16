@@ -3,7 +3,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class PickupModel {
-  // Collection reference
   final CollectionReference pickupCollection =
       FirebaseFirestore.instance.collection('pickup');
 
@@ -11,31 +10,26 @@ class PickupModel {
     List<Map<String, dynamic>> pickupData = [];
 
     try {
-      QuerySnapshot snapshot = await pickupCollection.get();
-      List<QueryDocumentSnapshot<Map<String, dynamic>>> documents = snapshot
-          .docs
-          .map((doc) => doc as QueryDocumentSnapshot<Map<String, dynamic>>)
-          .toList();
-      print(documents);
+      QuerySnapshot pickupSnapshot = await pickupCollection.get();
+      for (QueryDocumentSnapshot pickupDoc in pickupSnapshot.docs) {
+        String username = pickupDoc.id;
+        CollectionReference requestsCollection =
+            pickupCollection.doc(username).collection('requests');
+        QuerySnapshot requestsSnapshot = await requestsCollection.get();
 
-      for (QueryDocumentSnapshot<Map<String, dynamic>> doc in documents) {
-        Map<String, dynamic>? data = doc.data();
+        for (QueryDocumentSnapshot requestDoc in requestsSnapshot.docs) {
+          Map<String, dynamic> data = requestDoc.data() as Map<String, dynamic>;
 
-        String id = doc.id;
-        int telno = data['telno'];
-        String location = data['location'] ?? '';
-        String date = data['date'] ?? '';
-        String time = data['time'] ?? '';
-        bool status = data['status'];
-
-        pickupData.add({
-          'id': id,
-          'telno': telno,
-          'location': location,
-          'date': date,
-          'time': time,
-          'status': status,
-        });
+          pickupData.add({
+            'id': requestDoc.id,
+            'username': username,
+            'telno': data['telno'],
+            'location': data['location'] ?? '',
+            'date': data['date'] ?? '',
+            'time': data['time'] ?? '',
+            'status': data['status'],
+          });
+        }
       }
     } catch (error) {
       print('Error getting pickup data: $error');
@@ -44,10 +38,11 @@ class PickupModel {
     return pickupData;
   }
 
-  Future<void> updateStatus(String id) async {
+  Future<void> updateStatus(String username, String requestId) async {
     try {
-      DocumentReference documentRef = pickupCollection.doc(id);
-      await documentRef.update({
+      DocumentReference requestDoc =
+          pickupCollection.doc(username).collection('requests').doc(requestId);
+      await requestDoc.update({
         'status': true,
       });
     } catch (error) {

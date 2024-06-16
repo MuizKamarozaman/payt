@@ -10,7 +10,7 @@ import 'package:payt/views/pickupPage.dart';
 import 'package:payt/views/staff_RecyclePage.dart';
 import 'package:payt/views/staff_InventoryPage.dart';
 import 'package:payt/views/locationPage.dart';
-import 'package:payt/User_RequestPage.dart';
+import 'package:payt/views/User_RequestPage.dart';
 import 'package:payt/views/leaderboard.dart';
 import 'package:payt/views/staff_ProfilePage.dart';
 import 'package:payt/models/recycle_utils.dart';

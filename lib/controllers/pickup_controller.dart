@@ -9,7 +9,7 @@ class PickupController {
     return await _pickupModel.getPickupData();
   }
 
-  Future<void> updateStatus(String id) async {
-    await _pickupModel.updateStatus(id);
+  Future<void> updateStatus(String username, String requestId) async {
+    await _pickupModel.updateStatus(username, requestId);
   }
 }
