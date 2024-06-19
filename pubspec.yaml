@@ -45,14 +45,8 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - assets/images/SignUpBackground.png
-    - assets/images/loginPageBackground.png
-    - assets/images/semiCircle.png
-    - assets/images/wmsp_homepage_button1.jpg
-    - assets/images/wmsp_homepage_button2.jpeg
-    - assets/images/wmsp_homepage_button3.jpg
-    - assets/images/keng.jpg
-    - assets/images/leaderboard.png
+    - assets/images/
+    
 
   fonts:
     - family: Montserrat

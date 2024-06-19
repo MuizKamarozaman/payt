@@ -23,7 +23,10 @@ class UserRequestPage extends StatelessWidget {
             color: Colors.black,
           ),
           onPressed: () {
-            Get.offAll(() => HomePageUser());
+            Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (context) => HomePageUser()),
+              (route) => false,
+            );
           },
         ),
       ),
