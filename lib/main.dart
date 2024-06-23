@@ -23,6 +23,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          primarySwatch: Colors.green,
+        ),
         initialRoute: 'login_screen',
         routes: {
           // 'welcome_screen': (context) => (),

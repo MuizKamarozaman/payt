@@ -25,6 +25,16 @@ class UserController extends GetxController {
     fetchUserProfile();
   }
 
+  // Clear user profile
+  void clearUserProfile() {
+    userProfile.value = UserProfile(
+      fullName: '',
+      username: '',
+      location: '',
+      contactNo: '',
+    );
+  }
+
   // Method to check if email is already registered
   Future<bool> isEmailAlreadyRegistered(String email) async {
     return await FirebaseHelper.isEmailAlreadyRegistered(email);
@@ -70,6 +80,8 @@ class UserController extends GetxController {
 
       User? user = userCredential.user;
       if (user != null) {
+        await fetchUserProfile(); // Fetch the user profile for the logged-in user
+
         final userCollection = _firestore.collection('users');
         DocumentSnapshot snapshot = await userCollection.doc(user.uid).get();
 
@@ -132,6 +144,19 @@ class UserController extends GetxController {
       }
     } catch (e) {
       print('Error updating user profile: $e');
+    }
+  }
+
+  // Method to log out a user
+  Future<void> logoutUser(BuildContext context) async {
+    try {
+      await _auth.signOut();
+      clearUserProfile();
+      // Navigate to the login page or perform other logout actions
+      Navigator.pushReplacementNamed(
+          context, '/login'); // Assuming you have a named route for login
+    } catch (e) {
+      print('Error logging out user: $e');
     }
   }
 }

@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:payt/views/user_Recycle.dart';
-import 'package:payt/views/HistoryPage.dart';
+import 'package:payt/history/HistoryPage.dart';
 import 'package:payt/views/profilePage.dart';
 import 'package:payt/views/subscribePage.dart';
 import 'package:payt/views/loginPage.dart';
@@ -655,10 +655,9 @@ class _HomePageState2 extends State<HomePageStaff> {
             physics: NeverScrollableScrollPhysics(),
             children: [
               HomeScreenStaff(),
-              WMSPRecyclePage(),
+              StaffRecyclePage(),
               PickupView(),
               StaffProfilePage(),
-              // WMSPRecyclePage(),
             ],
           ),
         ),
@@ -720,7 +719,7 @@ class HomeScreenStaff extends StatelessWidget {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => WMSPRecyclePage()),
+                    MaterialPageRoute(builder: (context) => StaffRecyclePage()),
                   );
                 },
                 child: Container(

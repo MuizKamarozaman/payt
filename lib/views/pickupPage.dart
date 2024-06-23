@@ -1,5 +1,3 @@
-// lib/views/pickup_view.dart
-
 import 'package:flutter/material.dart';
 import 'package:payt/controllers/pickup_controller.dart';
 import 'package:payt/views/HomePage.dart';
@@ -40,7 +38,10 @@ class _PickupViewState extends State<PickupView> {
                 Navigator.of(context).pop();
               },
             ),
-            TextButton(
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary: Colors.green,
+              ),
               child: Text('Update'),
               onPressed: () async {
                 await _controller.updateStatus(username, requestId);
@@ -68,7 +69,7 @@ class _PickupViewState extends State<PickupView> {
         elevation: 0,
         title: Text(
           'Manage Request',
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
         leading: IconButton(
           icon: Icon(
@@ -85,116 +86,123 @@ class _PickupViewState extends State<PickupView> {
       ),
       body: SingleChildScrollView(
         child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                padding: EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Pending Approval',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(height: 8),
-                    Container(
-                      child: pendingApprovalData.isNotEmpty
-                          ? Column(
-                              children: pendingApprovalData.map((data) {
-                                return Card(
-                                  child: ListTile(
-                                    title: Text(data['location'],
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold)),
-                                    subtitle: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(data['date']),
-                                        Text(data['time']),
-                                      ],
-                                    ),
-                                    trailing: IconButton(
-                                      icon: Icon(Icons.check),
-                                      onPressed: () {
-                                        showConfirmationDialog(
-                                            data['username'], data['id']);
-                                      },
-                                    ),
-                                  ),
-                                );
-                              }).toList(),
-                            )
-                          : Container(
-                              width: double.infinity,
-                              height: 80,
-                              padding: EdgeInsets.symmetric(horizontal: 16),
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: Theme.of(context).dividerColor),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Text(
-                                'No pending approval',
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                    ),
-                    SizedBox(height: 32),
-                    Text(
-                      'Approved Request',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(height: 8),
-                    Container(
-                      child: approvedData.isNotEmpty
-                          ? Column(
-                              children: approvedData.map((data) {
-                                int telno = data['telno'];
-                                return Card(
-                                  child: ListTile(
-                                    title: Text(data['location'],
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold)),
-                                    subtitle: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(data['date']),
-                                        Text(data['time']),
-                                      ],
-                                    ),
-                                    trailing: Text('0$telno'),
-                                  ),
-                                );
-                              }).toList(),
-                            )
-                          : Container(
-                              width: double.infinity,
-                              height: 80,
-                              padding: EdgeInsets.symmetric(horizontal: 16),
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: Theme.of(context).dividerColor),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Text(
-                                'No approved requests',
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _buildSectionTitle('Pending Approval'),
+                _buildRequestTable(pendingApprovalData, isPending: true),
+                SizedBox(height: 32),
+                _buildSectionTitle('Approved Request'),
+                _buildRequestTable(approvedData),
+              ],
+            ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildSectionTitle(String title) {
+    return Text(
+      title,
+      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+    );
+  }
+
+  Widget _buildRequestTable(List<Map<String, dynamic>> data,
+      {bool isPending = false}) {
+    return Container(
+      width: double.infinity,
+      child: data.isNotEmpty
+          ? Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildTableHeader(),
+                Divider(),
+                ...data.asMap().entries.map((entry) {
+                  int index = entry.key;
+                  Map<String, dynamic> requestData = entry.value;
+                  return Column(
+                    children: [
+                      Container(
+                        color: index % 2 == 0 ? Colors.white : Colors.grey[200],
+                        child:
+                            _buildTableRow(requestData, isPending: isPending),
+                      ),
+                      Divider(),
+                    ],
+                  );
+                }).toList(),
+              ],
+            )
+          : Container(
+              width: double.infinity,
+              height: 80,
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                border: Border.all(color: Theme.of(context).dividerColor),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Text(
+                isPending ? 'No pending approval' : 'No approved requests',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ),
+    );
+  }
+
+  Widget _buildTableHeader() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+              child: Text('Username',
+                  style: TextStyle(fontWeight: FontWeight.bold))),
+          Expanded(
+              child:
+                  Text('Date', style: TextStyle(fontWeight: FontWeight.bold))),
+          Expanded(
+              child:
+                  Text('Time', style: TextStyle(fontWeight: FontWeight.bold))),
+          Expanded(
+              child: Text('Location',
+                  style: TextStyle(fontWeight: FontWeight.bold))),
+          SizedBox(width: 50), // for the button or phone number
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTableRow(Map<String, dynamic> requestData,
+      {bool isPending = false}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(child: Text(requestData['username'])),
+          Expanded(child: Text(requestData['date'])),
+          Expanded(child: Text(requestData['time'])),
+          Expanded(child: Text(requestData['location'])),
+          isPending
+              ? IconButton(
+                  icon: Icon(
+                    Icons.check_circle,
+                    color: Colors.green,
+                    size: 30,
+                  ),
+                  onPressed: () {
+                    showConfirmationDialog(
+                        requestData['username'], requestData['id']);
+                  },
+                )
+              : Text('0${requestData['telno']}'),
+        ],
       ),
     );
   }

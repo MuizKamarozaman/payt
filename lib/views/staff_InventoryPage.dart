@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:payt/controllers/staff_recycle_controller.dart';
+import 'package:payt/controllers/staff_Inventory_controller.dart';
 import 'package:payt/views/HomePage.dart';
 
 class InventoryPage extends StatelessWidget {
@@ -25,13 +25,10 @@ class InventoryPage extends StatelessWidget {
         elevation: 0,
         title: Text(
           'RecyTrack Inventory',
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
         leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            color: Colors.black,
-          ),
+          icon: Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
             Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(builder: (context) => HomePageStaff()),
@@ -66,6 +63,7 @@ class InventoryPage extends StatelessWidget {
                         alignment: Alignment.centerLeft,
                         padding: EdgeInsets.all(16),
                         decoration: BoxDecoration(
+                          color: Colors.blueAccent.withOpacity(0.1),
                           border:
                               Border.all(color: Theme.of(context).dividerColor),
                           borderRadius: BorderRadius.circular(8),
@@ -73,7 +71,8 @@ class InventoryPage extends StatelessWidget {
                         child: Text(
                           calculateTotalWeight(cumulativeWeights)
                               .toStringAsFixed(2),
-                          style: TextStyle(fontSize: 18),
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
                         ),
                       ),
                     ],
@@ -90,23 +89,36 @@ class InventoryPage extends StatelessWidget {
                     columns: [
                       DataColumn(
                         label: Flexible(
-                          child: Text('Type'),
+                          child: Text('Type',
+                              style: TextStyle(fontWeight: FontWeight.bold)),
                           fit: FlexFit.tight,
                         ),
                       ),
                       DataColumn(
                         label: Flexible(
-                          child: Text('Quantity (kg)'),
+                          child: Text('Quantity (kg)',
+                              style: TextStyle(fontWeight: FontWeight.bold)),
                           fit: FlexFit.tight,
                         ),
                       ),
                     ],
                     rows: cumulativeWeights.map((data) {
                       return DataRow(cells: [
-                        DataCell(Text(data['type'] ??
-                            '')), // Ensure the key is correct and handle null values
-                        DataCell(Text(data['totalWeight']?.toString() ??
-                            '')), // Ensure the key is correct and handle null values
+                        DataCell(Row(
+                          children: [
+                            Image.asset(
+                              'assets/images/${data['type']}.png',
+                              height: 30,
+                              width: 30,
+                              fit: BoxFit.cover,
+                            ),
+                            SizedBox(width: 8),
+                            Text(data['type'] ?? '',
+                                style: TextStyle(fontSize: 16)),
+                          ],
+                        )),
+                        DataCell(Text(data['totalWeight']?.toString() ?? '',
+                            style: TextStyle(fontSize: 16))),
                       ]);
                     }).toList(),
                   ),

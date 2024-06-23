@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:payt/controllers/user_Request_contorller.dart';
 import 'package:payt/views/HomePage.dart';
+import 'package:intl/intl.dart';
 
 class UserRequestPage extends StatelessWidget {
   final UserRequestController controller = Get.put(UserRequestController());
@@ -15,7 +16,7 @@ class UserRequestPage extends StatelessWidget {
         elevation: 0,
         title: Text(
           'Request Pickup',
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
         leading: IconButton(
           icon: Icon(
@@ -30,58 +31,73 @@ class UserRequestPage extends StatelessWidget {
           },
         ),
       ),
-      body: Center(
+      body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(24.0),
           child: Form(
             key: controller.formKey,
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                TextFormField(
-                  controller: controller.dateController,
-                  decoration: InputDecoration(labelText: 'Date'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter a date';
+                _buildTextField(
+                  controller.dateController,
+                  labelText: 'Date',
+                  hintText: 'Select a date',
+                  icon: Icons.calendar_today,
+                  readOnly: true,
+                  onTap: () async {
+                    DateTime? pickedDate = await showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime.now(),
+                      lastDate: DateTime(2101),
+                    );
+                    if (pickedDate != null) {
+                      controller.dateController.text =
+                          DateFormat('yyyy-MM-dd').format(pickedDate);
                     }
-                    return null;
                   },
                 ),
-                TextFormField(
-                  controller: controller.timeController,
-                  decoration: InputDecoration(labelText: 'Time'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter a time';
+                SizedBox(height: 16),
+                _buildTextField(
+                  controller.timeController,
+                  labelText: 'Time',
+                  hintText: 'Select a time',
+                  icon: Icons.access_time,
+                  readOnly: true,
+                  onTap: () async {
+                    TimeOfDay? pickedTime = await showTimePicker(
+                      context: context,
+                      initialTime: TimeOfDay.now(),
+                    );
+                    if (pickedTime != null) {
+                      controller.timeController.text =
+                          pickedTime.format(context);
                     }
-                    return null;
                   },
                 ),
-                TextFormField(
-                  controller: controller.locationController,
-                  decoration: InputDecoration(labelText: 'Location'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter a location';
-                    }
-                    return null;
-                  },
+                SizedBox(height: 16),
+                _buildTextField(
+                  controller.locationController,
+                  labelText: 'Location',
+                  hintText: 'Enter your location',
+                  icon: Icons.location_on,
                 ),
-                TextFormField(
-                  controller: controller.telNoController,
-                  decoration: InputDecoration(labelText: 'Telephone Number'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter a telephone number';
-                    }
-                    return null;
-                  },
-                  keyboardType: TextInputType.number,
+                SizedBox(height: 16),
+                _buildTextField(
+                  controller.telNoController,
+                  labelText: 'Telephone Number',
+                  hintText: 'Enter your telephone number',
+                  icon: Icons.phone,
+                  keyboardType: TextInputType.phone,
                 ),
+                SizedBox(height: 32),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     primary: Colors.green,
+                    padding: EdgeInsets.symmetric(vertical: 16),
+                    textStyle:
+                        TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   onPressed: controller.submitRequest,
                   child: Text('Submit Request'),
@@ -91,6 +107,37 @@ class UserRequestPage extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildTextField(
+    TextEditingController controller, {
+    required String labelText,
+    required String hintText,
+    required IconData icon,
+    bool readOnly = false,
+    TextInputType keyboardType = TextInputType.text,
+    VoidCallback? onTap,
+  }) {
+    return TextFormField(
+      controller: controller,
+      decoration: InputDecoration(
+        labelText: labelText,
+        hintText: hintText,
+        prefixIcon: Icon(icon),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+      ),
+      readOnly: readOnly,
+      keyboardType: keyboardType,
+      onTap: onTap,
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Please enter $labelText';
+        }
+        return null;
+      },
     );
   }
 }

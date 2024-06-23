@@ -1,11 +1,9 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:payt/controllers/staff_recycle_controller.dart';
-import 'package:payt/views/HomePage.dart';
+import 'package:payt/controllers/staff_Inventory_controller.dart';
 import 'package:payt/views/HomePage.dart';
 
-class WMSPRecyclePage extends StatelessWidget {
+class StaffRecyclePage extends StatelessWidget {
   final StaffRecycleController controller = Get.put(StaffRecycleController());
 
   // Input controllers
@@ -104,19 +102,22 @@ class WMSPRecyclePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
+        backgroundColor: Colors.white,
+        elevation: 1,
         title: Text(
           'Recycle',
-          style: TextStyle(color: Colors.black),
+          style: textTheme.headline6?.copyWith(color: Colors.green[800]),
         ),
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back,
-            color: Colors.black,
+            color: Colors.green[800],
           ),
           onPressed: () {
             Navigator.of(context).pushAndRemoveUntil(
@@ -127,207 +128,175 @@ class WMSPRecyclePage extends StatelessWidget {
         ),
       ),
       body: SingleChildScrollView(
-        child: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                key: _formKey,
-                padding: EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Username',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(height: 8),
-                    TextFormField(
-                      controller: usernameController,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: "Enter customer's username",
-                      ),
-                    ),
-                  ],
-                ),
+              _buildSectionTitle('Username'),
+              SizedBox(height: 8),
+              _buildTextField(
+                controller: usernameController,
+                hintText: "Enter customer's username",
               ),
-              Container(
-                padding: EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Total Weight (kg)',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(height: 8),
-                    TextFormField(
-                      controller: weightController,
-                      readOnly: true,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: 'Total Weight',
-                      ),
-                    ),
-                  ],
-                ),
+              SizedBox(height: 16),
+              _buildSectionTitle('Total Weight (kg)'),
+              SizedBox(height: 8),
+              _buildTextField(
+                controller: weightController,
+                hintText: 'Total Weight',
+                readOnly: true,
               ),
-              Container(
-                padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
-                alignment: Alignment.centerLeft,
-                child: Column(
-                  children: [
-                    Text(
-                      'Item',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(height: 8),
-                  ],
-                ),
-              ),
-              Container(
-                width: double.infinity,
-                margin: EdgeInsets.symmetric(horizontal: 16),
-                decoration: BoxDecoration(
-                  border: Border.all(color: Theme.of(context).dividerColor),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: DataTable(
-                  columns: [
-                    DataColumn(
-                      label: Flexible(
-                        child: Text('Type'),
-                        fit: FlexFit.tight,
-                      ),
-                    ),
-                    DataColumn(
-                      label: Flexible(
-                        child: Text('Quantity (kg)'),
-                        fit: FlexFit.tight,
-                      ),
-                    ),
-                  ],
-                  rows: [
-                    DataRow(cells: [
-                      DataCell(Text('Plastic')),
-                      DataCell(TextFormField(
-                        controller: plasticController,
-                        keyboardType: TextInputType.number,
-                        onChanged: (value) {
-                          calculateTotalWeight();
-                        },
-                      )),
-                    ]),
-                    DataRow(cells: [
-                      DataCell(Text('Glass')),
-                      DataCell(TextFormField(
-                        controller: glassController,
-                        keyboardType: TextInputType.number,
-                        onChanged: (value) {
-                          calculateTotalWeight();
-                        },
-                      )),
-                    ]),
-                    DataRow(cells: [
-                      DataCell(Text('Paper')),
-                      DataCell(TextFormField(
-                        controller: paperController,
-                        keyboardType: TextInputType.number,
-                        onChanged: (value) {
-                          calculateTotalWeight();
-                        },
-                      )),
-                    ]),
-                    DataRow(cells: [
-                      DataCell(Text('Rubber')),
-                      DataCell(TextFormField(
-                        controller: rubberController,
-                        keyboardType: TextInputType.number,
-                        onChanged: (value) {
-                          calculateTotalWeight();
-                        },
-                      )),
-                    ]),
-                    DataRow(cells: [
-                      DataCell(Text('Metal')),
-                      DataCell(TextFormField(
-                        controller: metalController,
-                        keyboardType: TextInputType.number,
-                        onChanged: (value) {
-                          calculateTotalWeight();
-                        },
-                      )),
-                    ]),
-                  ],
-                ),
-              ),
-              SizedBox(height: 4),
-              Container(
-                padding: EdgeInsets.all(16),
-                alignment: Alignment.centerRight,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    TextButton(
-                        onPressed: () {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => HomePageStaff()),
-                          );
-                        },
-                        child: Text('Cancel'),
-                        style: TextButton.styleFrom(
-                          primary: Colors.black,
-                        )),
-                    SizedBox(width: 16),
-                    ElevatedButton(
-                      onPressed: () {
-                        // Retrieve the user input values
-                        String username = usernameController.text;
-                        double weight =
-                            double.tryParse(weightController.text) ?? 0.0;
-                        double paymentTotal = calculateTotalPayment();
-                        double point = calculateTotalPoint(weight);
-                        double plastic =
-                            double.tryParse(plasticController.text) ?? 0.0;
-                        double glass =
-                            double.tryParse(glassController.text) ?? 0.0;
-                        double paper =
-                            double.tryParse(paperController.text) ?? 0.0;
-                        double rubber =
-                            double.tryParse(rubberController.text) ?? 0.0;
-                        double metal =
-                            double.tryParse(metalController.text) ?? 0.0;
-                        showConfirmationDialog(
-                          context,
-                          username,
-                          weight,
-                          plastic,
-                          glass,
-                          paper,
-                          rubber,
-                          metal,
-                          paymentTotal,
-                          point,
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        primary: Color.fromRGBO(101, 145, 87, 1),
-                      ),
-                      child: Text('Submit'),
-                    ),
-                  ],
-                ),
-              ),
+              SizedBox(height: 16),
+              _buildSectionTitle('Item'),
+              SizedBox(height: 8),
+              _buildDataTable(context),
+              SizedBox(height: 16),
+              _buildActionButtons(context),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildSectionTitle(String title) {
+    return Text(
+      title,
+      style: TextStyle(
+        fontSize: 18,
+        fontWeight: FontWeight.bold,
+        color: Colors.green[800],
+      ),
+    );
+  }
+
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String hintText,
+    bool readOnly = false,
+  }) {
+    return TextFormField(
+      controller: controller,
+      readOnly: readOnly,
+      decoration: InputDecoration(
+        border: OutlineInputBorder(),
+        hintText: hintText,
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.green[800]!),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDataTable(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.green[800]!),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: DataTable(
+        columns: [
+          DataColumn(
+            label: Text(
+              '',
+              style: textTheme.subtitle1?.copyWith(fontWeight: FontWeight.bold),
+            ),
+          ),
+          DataColumn(
+            label: Text(
+              'Type',
+              style: textTheme.subtitle1?.copyWith(fontWeight: FontWeight.bold),
+            ),
+          ),
+          DataColumn(
+            label: Text(
+              'Quantity (kg)',
+              style: textTheme.subtitle1?.copyWith(fontWeight: FontWeight.bold),
+            ),
+          ),
+        ],
+        rows: [
+          _buildDataRow(
+              'Plastic', 'assets/images/Plastic.png', plasticController),
+          _buildDataRow('Glass', 'assets/images/Glass.png', glassController),
+          _buildDataRow('Paper', 'assets/images/Paper.png', paperController),
+          _buildDataRow('Rubber', 'assets/images/Rubber.png', rubberController),
+          _buildDataRow('Metal', 'assets/images/Metal.png', metalController),
+        ],
+      ),
+    );
+  }
+
+  DataRow _buildDataRow(
+      String type, String assetPath, TextEditingController controller) {
+    return DataRow(
+      cells: [
+        DataCell(Image.asset(assetPath, height: 40, width: 40)),
+        DataCell(Text(type)),
+        DataCell(TextFormField(
+          controller: controller,
+          keyboardType: TextInputType.number,
+          decoration: InputDecoration(
+            border: InputBorder.none,
+          ),
+          onChanged: (value) {
+            calculateTotalWeight();
+          },
+        )),
+      ],
+    );
+  }
+
+  Widget _buildActionButtons(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        TextButton(
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => HomePageStaff()),
+            );
+          },
+          style: TextButton.styleFrom(
+            primary: Colors.green[800],
+          ),
+          child: Text('Cancel'),
+        ),
+        ElevatedButton(
+          onPressed: () {
+            // Retrieve the user input values
+            String username = usernameController.text;
+            double weight = double.tryParse(weightController.text) ?? 0.0;
+            double paymentTotal = calculateTotalPayment();
+            double point = calculateTotalPoint(weight);
+            double plastic = double.tryParse(plasticController.text) ?? 0.0;
+            double glass = double.tryParse(glassController.text) ?? 0.0;
+            double paper = double.tryParse(paperController.text) ?? 0.0;
+            double rubber = double.tryParse(rubberController.text) ?? 0.0;
+            double metal = double.tryParse(metalController.text) ?? 0.0;
+            showConfirmationDialog(
+              context,
+              username,
+              weight,
+              plastic,
+              glass,
+              paper,
+              rubber,
+              metal,
+              paymentTotal,
+              point,
+            );
+          },
+          style: ElevatedButton.styleFrom(
+            primary: Colors.green[800],
+          ),
+          child: Text('Submit'),
+        ),
+      ],
     );
   }
 }

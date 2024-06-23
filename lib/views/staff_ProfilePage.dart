@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:payt/controllers/staff_Profile_controller.dart';
 import 'package:payt/views/HomePage.dart';
 import 'package:payt/views/loginPage.dart';
-import 'package:payt/views/user_ProfilePage.dart';
+import 'package:payt/views/all_Update_ProfilePage.dart';
 
 class StaffProfilePage extends StatelessWidget {
   final StaffController _staffController = Get.put(StaffController());
@@ -30,29 +30,35 @@ class StaffProfilePage extends StatelessWidget {
           },
         ),
       ),
-      body: Container(
-        color: Colors.grey[200],
-        child: Center(
+      body: SingleChildScrollView(
+        child: Container(
+          color: Colors.grey[200],
+          padding: const EdgeInsets.all(20.0),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Container(
-                padding: const EdgeInsets.all(15.0),
-                child: Center(
-                  child: Obx(() {
-                    if (_staffController.errorMessage.isNotEmpty) {
-                      return Text(_staffController.errorMessage.value,
-                          style: TextStyle(color: Colors.red));
-                    }
+              Obx(() {
+                if (_staffController.errorMessage.isNotEmpty) {
+                  return Text(
+                    _staffController.errorMessage.value,
+                    style: TextStyle(color: Colors.red),
+                  );
+                }
 
-                    final user = _staffController.staff.value;
-                    return Container(
-                      width: 400,
-                      height: 150,
+                final user = _staffController.staff.value;
+                return Column(
+                  children: [
+                    CircleAvatar(
+                      radius: 50,
+                      backgroundImage: AssetImage('assets/images/profile.jpg'),
+                    ),
+                    SizedBox(height: 20),
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(20.0),
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        border: Border.all(
-                            color: Color.fromARGB(255, 255, 255, 255)),
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(15),
                         boxShadow: [
                           BoxShadow(
                             color: Colors.grey.withOpacity(0.5),
@@ -62,131 +68,90 @@ class StaffProfilePage extends StatelessWidget {
                           ),
                         ],
                       ),
-                      child: Row(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Container(
-                            padding:
-                                const EdgeInsets.only(left: 15.0, right: 15),
-                            width: 280,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                SizedBox(height: 10),
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Username  : ',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    SizedBox(width: 10),
-                                    Flexible(
-                                      child: Text(
-                                        '${user.username}',
-                                        overflow: TextOverflow.visible,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: 10),
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Email           : ',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    SizedBox(width: 10),
-                                    Flexible(
-                                      child: Text(
-                                        '${user.email}',
-                                        overflow: TextOverflow.visible,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: 10),
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Full Name   : ',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    SizedBox(width: 10),
-                                    Flexible(
-                                      child: Text(
-                                        '${user.fullName}',
-                                        overflow: TextOverflow.visible,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: 10),
-                              ],
-                            ),
-                          ),
-                          Container(
-                            child: Center(
-                              child: ElevatedButton(
-                                child: Text('Log out'),
-                                onPressed: () async {
-                                  await _staffController.signOut();
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => LoginDemo()),
-                                  );
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  primary: Colors.red,
-                                  onPrimary: Colors.white,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(32.0),
-                                  ),
+                          buildProfileRow('Username', user.username),
+                          SizedBox(height: 10),
+                          buildProfileRow('Email', user.email),
+                          SizedBox(height: 10),
+                          buildProfileRow('Location', user.location),
+                          SizedBox(height: 10),
+                          buildProfileRow('Contact No', user.contact_no),
+                          SizedBox(height: 10),
+                          Center(
+                            child: ElevatedButton(
+                              child: Text('Log out'),
+                              onPressed: () async {
+                                await _staffController.signOut();
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => LoginDemo()),
+                                );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                primary: Colors.red,
+                                onPrimary: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(32.0),
                                 ),
                               ),
                             ),
                           ),
                         ],
                       ),
-                    );
-                  }),
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.all(15.0),
-                child: Center(
-                  child: ElevatedButton(
-                    child: Text('Update Profile'),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => UpdateProfilePage()),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.green,
-                      onPrimary: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(32.0),
-                      ),
                     ),
+                  ],
+                );
+              }),
+              SizedBox(height: 30),
+              ElevatedButton(
+                child: Text('Update Profile'),
+                onPressed: () async {
+                  final result = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => UpdateProfilePage()),
+                  );
+                  if (result == true) {
+                    _staffController
+                        .fetchStaffData(); // Re-fetch the staff data if result is true
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.green,
+                  onPrimary: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(32.0),
                   ),
+                  padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                  textStyle: TextStyle(fontSize: 18),
                 ),
               ),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget buildProfileRow(String label, String value) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          '$label: ',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        SizedBox(width: 10),
+        Expanded(
+          child: Text(
+            value,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+      ],
     );
   }
 }
