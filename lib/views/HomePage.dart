@@ -1,18 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:payt/views/user_Recycle.dart';
-import 'package:payt/history/HistoryPage.dart';
-import 'package:payt/views/profilePage.dart';
-import 'package:payt/views/subscribePage.dart';
-import 'package:payt/views/loginPage.dart';
-import 'package:payt/views/pickupPage.dart';
-import 'package:payt/views/staff_RecyclePage.dart';
-import 'package:payt/views/staff_InventoryPage.dart';
-import 'package:payt/views/locationPage.dart';
-import 'package:payt/views/User_RequestPage.dart';
-import 'package:payt/views/leaderboard.dart';
-import 'package:payt/views/staff_ProfilePage.dart';
+import 'package:payt/staff_recycling/staff_RecyclePage.dart';
+import 'package:payt/user_management/user_ProfilePage.dart';
+import 'package:payt/user_management/loginPage.dart';
+import 'package:payt/user_recycling/user_Recycle.dart';
+import 'package:payt/subscribe/subscribePage.dart';
+import 'package:payt/history/historyPage.dart';
+import 'package:payt/pickup/pickupPage.dart';
+import 'package:payt/staff_recycling/staff_InventoryPage.dart';
+import 'package:payt/location/locationPage.dart';
+import 'package:payt/request/User_RequestPage.dart';
+import 'package:payt/leaderboard/leaderboard.dart';
+import 'package:payt/profile_page/staff_ProfilePage.dart';
 import 'package:payt/models/recycle_utils.dart';
 
 class RedirectPage extends StatefulWidget {

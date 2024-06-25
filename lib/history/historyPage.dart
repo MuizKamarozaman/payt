@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:payt/controllers/History_controller.dart';
+import 'package:payt/history/History_controller.dart';
 import 'package:payt/views/HomePage.dart';
 
 class HistoryPage extends StatelessWidget {
