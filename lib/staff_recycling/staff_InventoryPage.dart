@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:payt/staff_recycling/staff_Inventory_controller.dart';
+import 'package:payt/staff_recycling/staff_Recycling_controller.dart';
 import 'package:payt/views/HomePage.dart';
 
 class InventoryPage extends StatelessWidget {

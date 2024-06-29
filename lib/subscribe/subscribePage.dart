@@ -12,11 +12,11 @@ class SubscribePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        backgroundColor: Color.fromARGB(0, 110, 109, 109),
+        backgroundColor: Colors.transparent,
         elevation: 0,
         title: Text(
           'Subscribe',
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
         leading: IconButton(
           icon: Icon(
@@ -39,57 +39,103 @@ class SubscribePage extends StatelessWidget {
   Widget buildSubscribeForm(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(20.0),
-      child: Column(
-        children: <Widget>[
-          TextField(
-            controller: controller.cardNumber,
-            decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: 'Card Number',
-            ),
-          ),
-          SizedBox(height: 10.0),
-          TextField(
-            controller: controller.expMonth,
-            decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: 'Expiry Month',
-            ),
-          ),
-          SizedBox(height: 10.0),
-          TextField(
-            controller: controller.expYear,
-            decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: 'Expiry Year',
-            ),
-          ),
-          SizedBox(height: 10.0),
-          TextField(
-            controller: controller.cvc,
-            decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: 'CVC',
-            ),
-          ),
-          SizedBox(height: 10.0),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              primary: Colors.green,
-              onPrimary: Colors.white,
-            ),
-            child: Text('Subscribe'),
-            onPressed: controller.subscribe,
-          ),
-          if (controller.errorMessage.isNotEmpty)
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
             Text(
-              controller.errorMessage.value,
+              'Subscribe to our Premium Plan',
               style: TextStyle(
-                color: Colors.red,
-                fontSize: 16,
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: Colors.green,
               ),
             ),
-        ],
+            SizedBox(height: 10.0),
+            Text(
+              'Enjoy exclusive features such as:',
+              style: TextStyle(fontSize: 16),
+            ),
+            SizedBox(height: 5.0),
+            Text(
+              '• Request Pickup\n• Priority Support\n• Exclusive Offers',
+              style: TextStyle(fontSize: 16, color: Colors.grey[700]),
+            ),
+            SizedBox(height: 20.0),
+            TextField(
+              controller: controller.cardNumber,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Card Number',
+                prefixIcon: Icon(Icons.credit_card),
+              ),
+              keyboardType: TextInputType.number,
+            ),
+            SizedBox(height: 15.0),
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: controller.expMonth,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Expiry Month',
+                      prefixIcon: Icon(Icons.date_range),
+                    ),
+                    keyboardType: TextInputType.number,
+                  ),
+                ),
+                SizedBox(width: 10.0),
+                Expanded(
+                  child: TextField(
+                    controller: controller.expYear,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Expiry Year',
+                      prefixIcon: Icon(Icons.date_range),
+                    ),
+                    keyboardType: TextInputType.number,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 15.0),
+            TextField(
+              controller: controller.cvc,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'CVC',
+                prefixIcon: Icon(Icons.lock),
+              ),
+              keyboardType: TextInputType.number,
+              obscureText: true,
+            ),
+            SizedBox(height: 20.0),
+            Center(
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.green,
+                  onPrimary: Colors.white,
+                  padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                  textStyle: TextStyle(fontSize: 16),
+                ),
+                child: Text('Subscribe Now'),
+                onPressed: controller.subscribe,
+              ),
+            ),
+            if (controller.errorMessage.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.only(top: 10.0),
+                child: Text(
+                  controller.errorMessage.value,
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }
@@ -99,20 +145,29 @@ class SubscribePage extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          Icon(
+            Icons.check_circle,
+            color: Colors.green,
+            size: 100,
+          ),
+          SizedBox(height: 20.0),
           Text(
             'You are already subscribed!',
             style: TextStyle(
-              fontSize: 18,
+              fontSize: 22,
               fontWeight: FontWeight.bold,
             ),
           ),
           SizedBox(height: 20.0),
           ElevatedButton(
-              child: Text('Unsubscribe', style: TextStyle(color: Colors.white)),
-              onPressed: controller.unsubscribe,
-              style: ElevatedButton.styleFrom(
-                primary: Colors.red,
-              )),
+            child: Text('Unsubscribe', style: TextStyle(color: Colors.white)),
+            onPressed: controller.unsubscribe,
+            style: ElevatedButton.styleFrom(
+              primary: Colors.red,
+              padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+              textStyle: TextStyle(fontSize: 16),
+            ),
+          ),
         ],
       ),
     );

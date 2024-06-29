@@ -36,6 +36,9 @@ dependencies:
   firebase_core: ^2.24.2
   get: ^4.6.5
   intl: ^0.18.1
+  http: ^0.13.6
+
+  
   
   
 

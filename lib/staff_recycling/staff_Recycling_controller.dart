@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 
-import 'package:payt/staff_recycling/staff_Inventory_model.dart';
+import 'package:payt/staff_recycling/staff_Recycling_model.dart';
 
 class StaffRecycleController extends GetxController {
   final StaffRecycleModel recycleModel = StaffRecycleModel();
