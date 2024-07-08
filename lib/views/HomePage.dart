@@ -76,12 +76,37 @@ class _HomePageUserState extends State<HomePageUser> {
   List<Map<String, dynamic>>? recycleHistory;
   late PageController _pageController;
   bool isLoading = true;
+  String? username;
 
   @override
   void initState() {
     super.initState();
     _pageController = PageController(initialPage: _currentIndex);
     fetchRecycleHistory();
+    fetchUsername();
+  }
+
+  Future<void> fetchUsername() async {
+    try {
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        DocumentSnapshot<Map<String, dynamic>> snapshot =
+            await FirebaseFirestore.instance
+                .collection('users')
+                .doc(user.uid)
+                .get();
+        if (snapshot.exists) {
+          setState(() {
+            username = snapshot.get('username');
+          });
+        }
+      }
+    } catch (error) {
+      setState(() {
+        username = 'user';
+        isLoading = false;
+      });
+    }
   }
 
   Future<void> fetchRecycleHistory() async {
@@ -138,7 +163,16 @@ class _HomePageUserState extends State<HomePageUser> {
     return Scaffold(
       appBar: _currentIndex == 0
           ? AppBar(
-              title: Text("Recytrack"),
+              title: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Home",
+                    style:
+                        TextStyle(fontSize: 20), // Adjust font size as needed
+                  ),
+                ],
+              ),
               backgroundColor: Color.fromRGBO(101, 145, 87, 1),
               actions: [
                 Container(
@@ -233,11 +267,11 @@ class HomeScreenUser extends StatefulWidget {
 
 class _HomeScreenUserState extends State<HomeScreenUser> {
   bool isSubscribed = false;
+  String? username;
 
   @override
   void initState() {
     super.initState();
-    // checkSubscriptionStatus();
   }
 
   Future<bool> getPickupStatus(String username) async {
@@ -314,13 +348,33 @@ class _HomeScreenUserState extends State<HomeScreenUser> {
   @override
   Widget build(BuildContext context) {
     User? firebaseUser = FirebaseAuth.instance.currentUser;
-    Future<String> username = getUsername(firebaseUser!.uid);
-    Future<bool> pickupStatus =
-        username.then((username) => getPickupStatus(username));
     return SingleChildScrollView(
       child: Column(
-        // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
+          FutureBuilder<String>(
+            future: getUsername(firebaseUser!.uid),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return CircularProgressIndicator();
+              } else if (snapshot.hasError) {
+                return Text('Error: ${snapshot.error}');
+              } else {
+                final username = snapshot.data ?? 'No username';
+                return Container(
+                  alignment: Alignment.centerLeft,
+                  padding: EdgeInsets.fromLTRB(10, 10, 10, 30),
+                  child: Text(
+                    'Welcome, $username!',
+                    style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                );
+              }
+            },
+          ),
           Material(
             elevation: 8, // Adjust the value as needed
             child: Container(
@@ -633,7 +687,7 @@ class _HomePageState2 extends State<HomePageStaff> {
         return true;
       },
       child: Scaffold(
-        backgroundColor: Color.fromRGBO(250, 250, 250, 1),
+        backgroundColor: Color.fromRGBO(101, 145, 87, 1),
         body: GestureDetector(
           onHorizontalDragEnd: (DragEndDetails details) {
             if (details.primaryVelocity! > 0) {
@@ -692,10 +746,50 @@ class _HomePageState2 extends State<HomePageStaff> {
   }
 }
 
-class HomeScreenStaff extends StatelessWidget {
+class HomeScreenStaff extends StatefulWidget {
   @override
+  _HomeScreenStaffState createState() => _HomeScreenStaffState();
+}
+
+class _HomeScreenStaffState extends State<HomeScreenStaff> {
+  String? username;
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchUsername();
+  }
+
+  Future<void> fetchUsername() async {
+    try {
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        DocumentSnapshot<Map<String, dynamic>> snapshot =
+            await FirebaseFirestore.instance
+                .collection('users')
+                .doc(user.uid)
+                .get();
+        if (snapshot.exists) {
+          setState(() {
+            username = snapshot.get('username');
+          });
+        }
+      }
+    } catch (error) {
+      setState(() {
+        username = 'Staff';
+        isLoading = false;
+      });
+    }
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Home'),
+        backgroundColor: Color.fromRGBO(101, 145, 87, 1),
+      ),
       body: Center(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 15),
@@ -706,7 +800,7 @@ class HomeScreenStaff extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 padding: EdgeInsets.fromLTRB(10, 10, 10, 30),
                 child: Text(
-                  'Hi, Staff!',
+                  'Welcome, $username!',
                   style: TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.bold,
@@ -758,7 +852,7 @@ class HomeScreenStaff extends StatelessWidget {
                   ),
                 ),
               ),
-              Text('Waste Pickup'),
+              Text('Manage Request Pickup'),
               SizedBox(height: 16),
               InkWell(
                 // inventory button
@@ -784,7 +878,7 @@ class HomeScreenStaff extends StatelessWidget {
                   ),
                 ),
               ),
-              Text('RecyTrack Inventory'),
+              Text('Recycle Inventory'),
               SizedBox(height: 16),
             ],
           ),

@@ -18,12 +18,12 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        backgroundColor: Colors.transparent,
-        iconTheme: IconThemeData(color: Colors.black),
+        backgroundColor: Color.fromRGBO(101, 145, 87, 1),
+        iconTheme: IconThemeData(color: Colors.white),
         elevation: 0,
         title: Text(
           'Update Profile',
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
       ),
       body: Obx(() {

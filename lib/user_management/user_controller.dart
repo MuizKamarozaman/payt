@@ -114,7 +114,7 @@ class UserController extends GetxController {
         }
       }
     } catch (e) {
-      throw Exception('Error logging in user: $e');
+      throw Exception('The email or password is incorrect. Please try again.');
     }
   }
 

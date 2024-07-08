@@ -1,3 +1,4 @@
 {
-    "files.autoSave": "afterDelay"
+    "files.autoSave": "afterDelay",
+    "cmake.sourceDirectory": "C:/Users/Lenovo/Desktop/Sem 8/FYP 2/Recycle/payt/linux"
 }

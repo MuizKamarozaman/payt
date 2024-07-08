@@ -12,7 +12,7 @@ class HistoryPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        backgroundColor: Colors.green,
+        backgroundColor: Color.fromRGBO(101, 145, 87, 1),
         elevation: 0,
         title: Text(
           'Recycle History',

@@ -4,9 +4,11 @@ import 'package:payt/leaderboard/leaderboard.dart';
 import 'package:payt/user_management/loginPage.dart';
 import 'package:payt/user_management/signUpPage.dart';
 import 'package:payt/views/HomePage.dart';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'models/firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:dcdg/dcdg.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

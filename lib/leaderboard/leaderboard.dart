@@ -16,7 +16,7 @@ class LeaderboardPage extends StatelessWidget {
         ),
         centerTitle: true,
         elevation: 0.0,
-        backgroundColor: Colors.green,
+        backgroundColor: Color.fromRGBO(101, 145, 87, 1),
       ),
       body: Obx(() {
         if (controller.errorMessage.isNotEmpty) {
@@ -37,6 +37,7 @@ class LeaderboardPage extends StatelessWidget {
                   gradient: LinearGradient(
                     colors: [
                       Color.fromARGB(255, 48, 160, 85),
+                      Color.fromRGBO(101, 145, 87, 1),
                       Color.fromARGB(40, 81, 255, 0)
                     ],
                     begin: Alignment.topCenter,

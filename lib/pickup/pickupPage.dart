@@ -11,6 +11,7 @@ class PickupView extends StatefulWidget {
 class _PickupViewState extends State<PickupView> {
   final PickupController _controller = PickupController();
   List<Map<String, dynamic>> dataFromDatabase = [];
+  bool _isFetching = false;
 
   @override
   void initState() {
@@ -19,10 +20,17 @@ class _PickupViewState extends State<PickupView> {
   }
 
   Future<void> fetchData() async {
-    List<Map<String, dynamic>> pickupData = await _controller.getPickupData();
+    if (_isFetching) return;
     setState(() {
-      dataFromDatabase = pickupData;
+      _isFetching = true;
     });
+    List<Map<String, dynamic>> pickupData = await _controller.getPickupData();
+    if (mounted) {
+      setState(() {
+        dataFromDatabase = pickupData;
+        _isFetching = false;
+      });
+    }
   }
 
   Future<void> showConfirmationDialog(String username, String requestId) async {

@@ -37,6 +37,7 @@ dependencies:
   get: ^4.6.5
   intl: ^0.18.1
   http: ^0.13.6
+  dcdg: ^4.1.0
 
   
   

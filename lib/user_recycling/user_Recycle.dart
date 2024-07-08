@@ -27,16 +27,16 @@ class _RecyclePageState extends State<RecyclePage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        backgroundColor: Colors.transparent,
+        backgroundColor: Color.fromRGBO(101, 145, 87, 1),
         elevation: 0,
         title: Text(
           'Recycle',
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(color: Colors.white),
         ),
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back,
-            color: Colors.black,
+            color: Colors.white,
           ),
           onPressed: () {
             Navigator.of(context).pushAndRemoveUntil(

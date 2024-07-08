@@ -10,6 +10,12 @@ class DetailsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     return Scaffold(
+      appBar: (AppBar(
+        centerTitle: true,
+        backgroundColor: Color.fromRGBO(101, 145, 87, 1),
+        //title of the plants
+        title: Text(plant.name),
+      )),
       body: SafeArea(
         child: Stack(
           children: [
@@ -84,17 +90,6 @@ class DetailsPage extends StatelessWidget {
                       const SizedBox(height: 20.0),
                     ],
                   ),
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: const Icon(Icons.arrow_back),
                 ),
               ],
             ),
